@@ -8,23 +8,55 @@ import (
 func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Custom-Header", "Vrijednost 1")
-		w.Header().Set("Custom-Header", "Vrijednost 2")
+		// w.Header().Set("Custom-Header", "Vrijednost 1")
+		// w.Header().Set("Custom-Header", "Vrijednost 2")
 
-		w.Header().Del("Custom-Header")
+		w.Header().Set("X-Forwarded-For", "12121.1.321.21.21.321")
 
-		w.WriteHeader(http.StatusGatewayTimeout)
-		w.Write([]byte("Janko"))
+		// w.Header().Del("Custom-Header")
 
-		cookies, err := r.Cookie("jsw")
+		// w.WriteHeader(http.StatusGatewayTimeout)
 
+		// w.Write([]byte("Janko"))
+		err := r.ParseForm()
 		if err != nil {
-			fmt.Println("MY BIG ERR", err)
+			// Greška pri parsiranju forme
+			http.Error(w, "Greška pri parsiranju forme", http.StatusBadRequest)
+			return
 		}
 
-		fmt.Println(cookies.Value)
+		// cookies, err := r.Cookie("jsw")
+
+		// if err != nil {
+		// 	fmt.Println("MY BIG ERR", err)
+		// }
+
+		// fmt.Println(cookies.Value)
 
 		fmt.Println(r.URL.Path)
+
+		// get, _, err := r.FormFile("name")
+
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+		// name := r.Form.Get("name")
+
+		// body, err := ioutil.ReadAll(r.Body)
+		// if err != nil {
+		// 	http.Error(w, "Greška pri čitanju tijela zahtjeva", http.StatusBadRequest)
+		// 	return
+		// }
+
+		fmt.Println(r.Host)
+
+		// Ispisivanje tijela zahtjeva
+		// fmt.Println("Tijelo zahtjeva:", string(body))
+
+		fmt.Println(r.ContentLength)
+		// fmt.Println(name)
+
+		fmt.Println(r.RemoteAddr)
 
 	})
 
